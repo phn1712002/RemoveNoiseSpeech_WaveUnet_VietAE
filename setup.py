@@ -1,16 +1,11 @@
-from setuptools import setup
-  
+from setuptools import setup, find_packages
+
+# Đọc nội dung từ tệp requirements.txt
+with open('requirements.txt') as f:
+    requirements = f.read().splitlines()
+
 setup(
     name='RemoveNoiseSpeech_WaveUnet_VietAE',
-    packages=['Architecture, Tools'],
-    install_requires=[
-        'librosa',
-        'wandb',
-        'audiomentations',
-        'tensorflow',
-        'tensorflow-io',
-        'keras',
-        'pandas',
-        'numpy'
-    ],
+    packages=find_packages(),
+    install_requires=requirements,
 )
