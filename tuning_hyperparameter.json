@@ -1,0 +1,31 @@
+{
+    "config_wandb":{
+        "api_key": "",
+        "project": "Tuning WaveUnet",
+        "count": 10
+    },
+    "config_dataset":{
+        "size_dataset": 0.5
+    },
+    "config_other":{
+        "warning": false
+    },
+    "config_sweep":{
+        "method": "random",
+        "metric": {
+            "name": "val_loss",
+            "goal": "minimize"
+        },
+        "parameters": {
+            "batch_size_train":{
+                "values": [8, 16, 32, 64, 128, 512]
+            },
+            "batch_size_dev":{
+                "value": 8
+            },
+            "epochs":{
+                "value": 1
+            }
+        }
+    }
+}

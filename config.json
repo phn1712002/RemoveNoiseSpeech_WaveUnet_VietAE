@@ -1,0 +1,56 @@
+{
+    "config_wandb": {
+        "using": true,
+        "api_key": "",
+        "project": "",
+        "name": "",
+        "sync_tensorboard": false
+    },
+    "config_model": {
+        "name": "WaveUnet",
+        "num_initial_filters": 24, 
+        "num_layers": 12,   
+        "kernel_size": 15, 
+        "merge_filter_size": 5,
+        "output_filter_size": 1, 
+        "padding": "same", 
+        "input_size": 49152, 
+        "context": true, 
+    "upsampling_type": "learned",
+        "output_activation": "linear", 
+        "output_type": "difference",
+        "sr": 16000      
+    },
+    "config_dataset": {
+        "batch_size_train": 1,  
+        "batch_size_dev": 1,
+        "params_noise": {
+            "AddBackgroundNoise": {
+                "sounds_path": "./Dataset/raw/Noise/",
+                "min_snr_db": 0.1,
+                "max_snr_db": 0.25,
+                "p": 1
+            },
+            "AddGaussianSNR": {
+                "min_snr_db":0.1,
+                "max_snr_db":0.25,
+                "p": 0.5
+            }
+        }         
+    },
+    "config_opt": {
+        "learning_rate": 0.0001
+    },
+    "config_other": {
+        "warning": false,
+        "summary": true
+    },
+    "config_train": {
+        "epochs": 1,
+        "checkpoint": {
+            "monitor": "val_loss",
+            "mode": "auto",
+            "verbose": 1
+        }
+    }
+}

@@ -1,0 +1,11 @@
+librosa
+wandb
+audiomentations
+tensorflow
+tensorflow-io
+keras
+pandas
+numpy
+sounddevice
+keyboard
+pyaudio
