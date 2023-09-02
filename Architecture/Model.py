@@ -1,4 +1,4 @@
-import keras
+import keras, os
 import tensorflow as tf
 from keras import losses, optimizers
 from Tools.Json import loadJson
@@ -191,15 +191,19 @@ class WaveUnet(CustomModel):
 
 class WaveUnet_tflite(WaveUnet):
     def __init__(self, path='./Checkpoint/export/', name_file='WaveUnet'):
-        config_model = loadJson(path=path + name_file + '.json')
-        super().__init__(**config_model)
-        
+
         self.path = path
         self.name_file = name_file
         
         self.index_input = None
         self.index_ouput = None
         self.dtype_input = None
+        
+        if os.path.exists(path):
+            config_model = loadJson(path=path + name_file + '.json')
+            super().__init__(**config_model)
+        else:
+            raise RuntimeError('Model load error')
 
     def predict(self, audio_input):
         tf_audio_input, excess_amount = super().cutAudio(tf_signal=audio_input, 
@@ -215,12 +219,13 @@ class WaveUnet_tflite(WaveUnet):
         self.index_ouput = self.model.get_output_details()[1]['index']
         return self
     
-    def __invoke(self, tf_input):
-        shape_input = (tf_input.shape[0], tf_input.shape[1], tf_input.shape[2])
-        self.model.resize_tensor_input(self.index_input, shape_input)
-        self.model.allocate_tensors()
-        self.model.set_tensor(self.index_input, tf_input)
-        self.model.invoke()
-        ouput = self.model.get_tensor(self.index_ouput)
+    def __invoke(self, input_tf):
+        model = self.model 
+        shape_input = (input_tf.shape[0], input_tf.shape[1], input_tf.shape[2])
+        model.resize_tensor_input(self.index_input, shape_input)
+        model.allocate_tensors()
+        model.set_tensor(self.index_input, input_tf)
+        model.invoke()
+        ouput = model.get_tensor(self.index_ouput)
         tf_output = tf.convert_to_tensor(ouput)
         return tf_output
